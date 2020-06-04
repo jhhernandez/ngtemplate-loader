@@ -1,14 +1,14 @@
 {
-  "name": "ngtemplate-loader",
-  "version": "2.0.1",
-  "description": "Include AngularJS templates in the Webpack bundle and preload the template cache.",
+  "name": "@jhhernandez/ngtemplate-loader",
+  "version": "2.0.2",
+  "description": "Include AngularJS templates in the Webpack bundle and preload the template cache. This version works for html-loader>=1.0.0",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/webpack/bin/webpack.js --config=test/webpack.config.js"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/WearyMonkey/ngtemplate-loader.git"
+    "url": "git://git@github.com:jhhernandez/ngtemplate-loader.git"
   },
   "keywords": [
     "webpack",
@@ -28,8 +28,17 @@
   },
   "devDependencies": {
     "baggage-loader": "^0.2.1",
-    "html-loader": "^0.2.2",
+    "html-loader": "^1.0.0",
     "raw-loader": "^0.5.1",
-    "webpack": "^1.7.0"
-  }
+    "webpack": "^4.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/jhhernandez/ngtemplate-loader/issues"
+  },
+  "homepage": "https://github.com/jhhernandez/ngtemplate-loader#readme",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "license": "ISC"
 }

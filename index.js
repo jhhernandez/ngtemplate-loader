@@ -1,19 +1,19 @@
-var loaderUtils = require("loader-utils");
-var path = require('path');
-var jsesc = require('jsesc');
+const loaderUtils = require("loader-utils");
+const path = require('path');
+const jsesc = require('jsesc');
 
 module.exports = function (content) {
     this.cacheable && this.cacheable();
 
-    var options = loaderUtils.getOptions(this) || {};
-    var ngModule = getAndInterpolateOption.call(this, 'module', 'ng'); // ng is the global angular module that does not need to explicitly required
-    var relativeTo = getAndInterpolateOption.call(this, 'relativeTo', '');
-    var prefix = getAndInterpolateOption.call(this, 'prefix', '');
-    var requireAngular = !!options.requireAngular || false;
-    var absolute = false;
-    var pathSep = options.pathSep || '/';
-    var resource = this.resource;
-    var pathSepRegex = new RegExp(escapeRegExp(path.sep), 'g');
+    const options = loaderUtils.getOptions(this) || {};
+    const ngModule = getAndInterpolateOption.call(this, 'module', 'ng'); // ng is the global angular module that does not need to explicitly required
+    const relativeTo = getAndInterpolateOption.call(this, 'relativeTo', '');
+    const prefix = getAndInterpolateOption.call(this, 'prefix', '');
+    const requireAngular = !!options.requireAngular || false;
+    const absolute = false;
+    const pathSep = options.pathSep || '/';
+    const resource = this.resource;
+    const pathSepRegex = new RegExp(escapeRegExp(path.sep), 'g');
 
     // if a unix path starts with // we treat is as an absolute path e.g. //Users/wearymonkey
     // if we're on windows, then we ignore the / prefix as windows absolute paths are unique anyway e.g. C:\Users\wearymonkey
@@ -33,31 +33,31 @@ module.exports = function (content) {
         resource = resource.replace(pathSepRegex, pathSep)
     }
 
-    var relativeToIndex = resource.indexOf(relativeTo);
+    const relativeToIndex = resource.indexOf(relativeTo);
     if (relativeToIndex === -1 || (absolute && relativeToIndex !== 0)) {
         throw new Error('The path for file doesn\'t contain relativeTo param');
     }
 
     // a custom join of prefix using the custom path sep
-    var filePath = [prefix, resource.slice(relativeToIndex + relativeTo.length)]
+    const filePath = [prefix, resource.slice(relativeToIndex + relativeTo.length)]
         .filter(Boolean)
         .join(pathSep)
         .replace(new RegExp(escapeRegExp(pathSep) + '+', 'g'), pathSep);
-    var html;
+    let html;
 
-    if (content.match(/^module\.exports/)) {
-        var firstQuote = findQuote(content, false);
-        var secondQuote = findQuote(content, true);
+    if (content.match(/^module\.exports/) || content.match(/^(var|let|const) code/m)) {
+        const firstQuote = findQuote(content, false);
+        const secondQuote = findQuote(content, true);
         html = content.substr(firstQuote, secondQuote - firstQuote + 1);
     } else {
         html = content;
     }
 
-    return "var path = '"+jsesc(filePath)+"';\n" +
-        "var html = " + html + ";\n" +
-        (requireAngular ? "var angular = require('angular');\n" : "window.") +
-        "angular.module('" + ngModule + "').run(['$templateCache', function(c) { c.put(path, html) }]);\n" +
-        "module.exports = path;";
+    return `var path = '${jsesc(filePath)}';
+        var html = ${html};
+        ${requireAngular ? "var angular = require('angular');\n" : "window."}
+        angular.module('${ngModule}').run(['$templateCache', function(c) { c.put(path, html); }]);
+        module.exports = path;`;
 
     function getAndInterpolateOption(optionKey, def) {
         return options[optionKey]

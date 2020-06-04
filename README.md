@@ -1,14 +1,14 @@
 # AngularJS Template loader for [webpack](http://webpack.github.io/)
 
 Includes your AngularJS templates into your webpack Javascript Bundle. Pre-loads the AngularJS template cache
-to remove initial load times of templates.
+to remove initial load times of templates. This fork works for versions of html-loader>=1.0.0.
 
 ngTemplate loader does not minify or process your HTML at all, and instead uses the standard loaders such as [html-loader](https://github.com/webpack-contrib/html-loader)
 or [raw-loader](https://github.com/webpack-contrib/raw-loader). This gives you the flexibility to pick and choose your HTML loaders.
 
 ## Install
 
-`npm install ngtemplate-loader --save-dev`
+`npm install @jhhernandez/ngtemplate-loader --save-dev`
 
 ## Usage
 
