@@ -7,13 +7,13 @@ module.exports = function (content) {
 
     const options = loaderUtils.getOptions(this) || {};
     const ngModule = getAndInterpolateOption.call(this, 'module', 'ng'); // ng is the global angular module that does not need to explicitly required
-    const relativeTo = getAndInterpolateOption.call(this, 'relativeTo', '');
-    const prefix = getAndInterpolateOption.call(this, 'prefix', '');
     const requireAngular = !!options.requireAngular || false;
-    const absolute = false;
     const pathSep = options.pathSep || '/';
-    const resource = this.resource;
     const pathSepRegex = new RegExp(escapeRegExp(path.sep), 'g');
+    let relativeTo = getAndInterpolateOption.call(this, 'relativeTo', '');
+    let prefix = getAndInterpolateOption.call(this, 'prefix', '');
+    let absolute = false;
+    let resource = this.resource;
 
     // if a unix path starts with // we treat is as an absolute path e.g. //Users/wearymonkey
     // if we're on windows, then we ignore the / prefix as windows absolute paths are unique anyway e.g. C:\Users\wearymonkey
@@ -70,7 +70,7 @@ module.exports = function (content) {
     }
 
     function findQuote(content, backwards) {
-        var i = backwards ? content.length - 1 : 0;
+        let i = backwards ? content.length - 1 : 0;
         while (i >= 0 && i < content.length) {
             if (content[i] === '"' || content[i] === "'") {
                 return i;
